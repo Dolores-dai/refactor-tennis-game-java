@@ -42,26 +42,7 @@ public class TennisGameImpl implements TennisGame {
 
         score = getSameScore(player1, player2);
 
-        if (P1point > P2point && P1point < 4) {
-            if (P1point == 2)
-                P1res = "Thirty";
-            if (P1point == 3)
-                P1res = "Forty";
-            if (P2point == 1)
-                P2res = "Fifteen";
-            if (P2point == 2)
-                P2res = "Thirty";
-            score = player1.getRes() + "-" + player2.getRes();
-        }
-        if (P2point > P1point && P2point < 4) {
-            if (P2point == 2)
-                P2res = "Thirty";
-            if (P2point == 3)
-                P2res = "Forty";
-            if (P1point == 1)
-                P1res = "Fifteen";
-            if (P1point == 2)
-                P1res = "Thirty";
+        if (!(player1 instanceof SuperPlayer) && !(player2 instanceof SuperPlayer) && P1point != P2point) {
             score = player1.getRes() + "-" + player2.getRes();
         }
 
