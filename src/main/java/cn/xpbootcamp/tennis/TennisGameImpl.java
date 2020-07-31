@@ -1,7 +1,5 @@
 package cn.xpbootcamp.tennis;
 
-import java.util.Objects;
-
 public class TennisGameImpl implements TennisGame {
     private int P1point = 0;
     private int P2point = 0;
@@ -40,19 +38,9 @@ public class TennisGameImpl implements TennisGame {
         PlayerInterface player2 = convertToDetailType(P2point, player2Name);
         String score = "";
 
+        score = getOneLoveScore(player1, player2);
 
-        if (!Objects.isNull(player1) && !Objects.isNull(player2)) {
-            if (player1 instanceof LovePlayer && !(player2 instanceof LovePlayer)) {
-                score = player1.getRes() + "-" + player2.getRes();
-            } else if (player2 instanceof LovePlayer && !(player1 instanceof LovePlayer)) {
-                score = player2.getRes() + "-" + player1.getRes();
-            } else if (player1.getPoint() == player2.getPoint()) {
-                if (player1.getPoint() < 3) {
-                    score = getEqualScoreLessThanFour();
-                } else score = "Deuce";
-            }
-        }
-
+        score = getSameScore(player1, player2);
 
         if (P1point > P2point && P1point < 4) {
             if (P1point == 2)
@@ -93,6 +81,25 @@ public class TennisGameImpl implements TennisGame {
         }
 
         return score;
+    }
+
+    private String getSameScore(PlayerInterface player1, PlayerInterface player2) {
+        if (player1.getPoint() == player2.getPoint()) {
+            if (player1.getPoint() < 3) {
+                return getEqualScoreLessThanFour();
+            } else return "Deuce";
+        }
+        return "";
+    }
+
+    private String getOneLoveScore(PlayerInterface player1, PlayerInterface player2) {
+        if (player1 instanceof LovePlayer && !(player2 instanceof LovePlayer)) {
+            return player1.getRes() + "-" + player2.getRes();
+        }
+        if (player2 instanceof LovePlayer && !(player1 instanceof LovePlayer)) {
+            return player2.getRes() + "-" + player1.getRes();
+        }
+        return "";
     }
 
     private String getEqualScoreLessThanFour() {
