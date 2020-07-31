@@ -1,5 +1,7 @@
 package cn.xpbootcamp.tennis;
 
+import java.util.Objects;
+
 public class TennisGameImpl implements TennisGame {
     private int P1point = 0;
     private int P2point = 0;
@@ -14,36 +16,43 @@ public class TennisGameImpl implements TennisGame {
         this.player2Name = player2Name;
     }
 
+    public PlayerInterface convertToDetailType(int point, String playerName) {
+        if (point == TennisScoreEnum.LOVE.point) {
+            return new LovePlayer(playerName);
+        }
+        if (point == TennisScoreEnum.FIFTEEN.point) {
+            return new FifteenPlayer(playerName);
+        }
+        if (point == TennisScoreEnum.THIRTY.point) {
+            return new ThirtyPlayer(playerName);
+        }
+        if (point == TennisScoreEnum.FORTY.point) {
+            return new FortyPlayer(playerName);
+        }
+        if (point == 4) {
+            return new SuperPlayer(playerName, point, "Win for ");
+        }
+        return new SuperPlayer(playerName, point, "Advantage ");
+    }
+
     public String getScore() {
+        PlayerInterface player1 = convertToDetailType(P1point, player1Name);
+        PlayerInterface player2 = convertToDetailType(P2point, player2Name);
         String score = "";
-        if (P1point == P2point && P1point < 4) {
-            score = getEqualScoreLessThanFour();
-        }
-        if (P1point == P2point && P1point >= 3)
-            score = "Deuce";
 
-        if (P1point > 0 && P2point == 0) {
-            if (P1point == 1)
-                P1res = "Fifteen";
-            if (P1point == 2)
-                P1res = "Thirty";
-            if (P1point == 3)
-                P1res = "Forty";
 
-            P2res = "Love";
-            score = P1res + "-" + P2res;
+        if (!Objects.isNull(player1) && !Objects.isNull(player2)) {
+            if (player1 instanceof LovePlayer && !(player2 instanceof LovePlayer)) {
+                score = player1.getRes() + "-" + player2.getRes();
+            } else if (player2 instanceof LovePlayer && !(player1 instanceof LovePlayer)) {
+                score = player2.getRes() + "-" + player1.getRes();
+            } else if (player1.getPoint() == player2.getPoint()) {
+                if (player1.getPoint() < 3) {
+                    score = getEqualScoreLessThanFour();
+                } else score = "Deuce";
+            }
         }
-        if (P2point > 0 && P1point == 0) {
-            if (P2point == 1)
-                P2res = "Fifteen";
-            if (P2point == 2)
-                P2res = "Thirty";
-            if (P2point == 3)
-                P2res = "Forty";
 
-            P1res = "Love";
-            score = P1res + "-" + P2res;
-        }
 
         if (P1point > P2point && P1point < 4) {
             if (P1point == 2)
@@ -54,7 +63,7 @@ public class TennisGameImpl implements TennisGame {
                 P2res = "Fifteen";
             if (P2point == 2)
                 P2res = "Thirty";
-            score = P1res + "-" + P2res;
+            score = player1.getRes() + "-" + player2.getRes();
         }
         if (P2point > P1point && P2point < 4) {
             if (P2point == 2)
@@ -65,7 +74,7 @@ public class TennisGameImpl implements TennisGame {
                 P1res = "Fifteen";
             if (P1point == 2)
                 P1res = "Thirty";
-            score = P1res + "-" + P2res;
+            score = player1.getRes() + "-" + player2.getRes();
         }
 
         if (P1point > P2point && P2point >= 3) {
@@ -82,11 +91,12 @@ public class TennisGameImpl implements TennisGame {
         if (P2point >= 4 && P1point >= 0 && (P2point - P1point) >= 2) {
             score = "Win for player2";
         }
+
         return score;
     }
 
     private String getEqualScoreLessThanFour() {
-        return  TennisScoreEnum.getScoreByPoint(P1point) + "-All";
+        return TennisScoreEnum.getScoreByPoint(P1point) + "-All";
     }
 
     public void SetP1Score(int number) {

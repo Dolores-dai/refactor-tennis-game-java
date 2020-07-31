@@ -10,12 +10,14 @@ public enum TennisScoreEnum {
     FORTY("Forty", 3);
 
     private static final Map<String, Integer> SCORE_MAP_POINT = new HashMap<>();
-    private static final Map<Integer,String> POINT_MAP_SCORE = new HashMap<>();
+    private static final Map<Integer, String> POINT_MAP_SCORE = new HashMap<>();
+    private static final Map<Integer, TennisScoreEnum> POINT_MAP_TENNIS_SCORE_ENUM = new HashMap<>();
 
     static {
         for (TennisScoreEnum tennisScoreEnum : values()) {
             SCORE_MAP_POINT.put(tennisScoreEnum.score, tennisScoreEnum.point);
             POINT_MAP_SCORE.put(tennisScoreEnum.point, tennisScoreEnum.score);
+            POINT_MAP_TENNIS_SCORE_ENUM.put(tennisScoreEnum.point, tennisScoreEnum);
         }
     }
 
